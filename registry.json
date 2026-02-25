@@ -81,6 +81,14 @@
         { "name": "sysinfo", "description": "查看系統資訊" }
       ],
       "author": "Jeffrey"
+    },
+    {
+      "name": "stats",
+      "description": "開發生產力統計",
+      "commands": [
+        { "name": "stats", "description": "查看生產力統計 (week/month/hours/projects)" }
+      ],
+      "author": "Jeffrey"
     }
   ]
 }
