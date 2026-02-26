@@ -64,6 +64,17 @@
       "author": "Jeffrey"
     },
     {
+      "name": "map",
+      "description": "地點導航 — 快速存取 Google Maps",
+      "commands": [
+        {
+          "name": "map",
+          "description": "地點導航 (add/del/名稱)"
+        }
+      ],
+      "author": "Jeffrey"
+    },
+    {
       "name": "mcp",
       "description": "MCP 工具管理",
       "commands": [
@@ -119,23 +130,23 @@
       "author": "Jeffrey"
     },
     {
-      "name": "sysinfo",
-      "description": "系統資訊查詢",
-      "commands": [
-        {
-          "name": "sysinfo",
-          "description": "查看系統資訊"
-        }
-      ],
-      "author": "Jeffrey"
-    },
-    {
       "name": "stats",
       "description": "開發生產力統計",
       "commands": [
         {
           "name": "stats",
           "description": "查看生產力統計 (week/month/hours/projects)"
+        }
+      ],
+      "author": "Jeffrey"
+    },
+    {
+      "name": "sysinfo",
+      "description": "系統資訊查詢",
+      "commands": [
+        {
+          "name": "sysinfo",
+          "description": "查看系統資訊"
         }
       ],
       "author": "Jeffrey"
