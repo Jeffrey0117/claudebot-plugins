@@ -4,6 +4,20 @@ import type { BotContext } from '../../types/context.js'
 /** Only allow safe math characters — blocks code injection. */
 const SAFE_EXPR = /^[\d\s+\-*/().%^,epiPIsqrtabcologceilfloorround]+$/
 
+/** Normalize phone keyboard symbols to ASCII equivalents. */
+function normalizeSymbols(input: string): string {
+  return input
+    .replace(/[＾ˆ]/g, '^')       // fullwidth/modifier → caret
+    .replace(/[×✕✖]/g, '*')      // multiplication signs → *
+    .replace(/[÷]/g, '/')         // division sign → /
+    .replace(/[（]/g, '(')        // fullwidth parens
+    .replace(/[）]/g, ')')
+    .replace(/[＋]/g, '+')
+    .replace(/[－—–]/g, '-')      // fullwidth/em/en dash → minus
+    .replace(/[．]/g, '.')
+    .replace(/[％]/g, '%')
+}
+
 /** Built-in constants and functions exposed to the evaluator. */
 const MATH_ENV: Record<string, number | ((...args: readonly number[]) => number)> = {
   pi: Math.PI,
@@ -18,14 +32,17 @@ const MATH_ENV: Record<string, number | ((...args: readonly number[]) => number)
 }
 
 function evaluate(raw: string): number {
-  let expr = raw
+  const normalized = normalizeSymbols(raw)
+  let expr = normalized
     .replace(/\s+/g, '')
     .replace(/\^/g, '**')     // 2^10 → 2**10
     .replace(/(\d)%/g, '($1/100)')  // 50% → (50/100)
 
   // Validate: only safe characters after substitution
-  if (!SAFE_EXPR.test(raw.replace(/\s/g, ''))) {
-    throw new Error('不支援的字元')
+  if (!SAFE_EXPR.test(normalized.replace(/\s/g, ''))) {
+    // Find the offending character for a helpful message
+    const bad = normalized.replace(/\s/g, '').split('').find((c) => !SAFE_EXPR.test(c))
+    throw new Error(`不支援的字元「${bad ?? '?'}」\n支援：+ - * / ^ % sqrt abs log pi e`)
   }
 
   // Build sandboxed function with math helpers
@@ -70,7 +87,9 @@ async function calcCommand(ctx: BotContext): Promise<void> {
 
   try {
     const result = evaluate(expr)
-    await ctx.reply(`🧮 \`${expr}\` = **${formatNumber(result)}**`, { parse_mode: 'Markdown' })
+    // Show normalized expression so user sees what was actually computed
+    const display = normalizeSymbols(expr)
+    await ctx.reply(`🧮 \`${display}\` = **${formatNumber(result)}**`, { parse_mode: 'Markdown' })
   } catch (err) {
     const msg = err instanceof Error ? err.message : '計算錯誤'
     await ctx.reply(`❌ ${msg}`)
