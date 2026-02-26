@@ -2,9 +2,23 @@
   "plugins": [
     {
       "name": "browse",
-      "description": "互動式網頁瀏覽器",
+      "description": "網頁瀏覽與操作",
       "commands": [
-        { "name": "browse", "description": "瀏覽網頁 (URL/click/type/back)" }
+        {
+          "name": "browse",
+          "description": "瀏覽網頁 (URL/click/type/back)"
+        }
+      ],
+      "author": "Jeffrey"
+    },
+    {
+      "name": "calc",
+      "description": "計算機 — 數學運算",
+      "commands": [
+        {
+          "name": "calc",
+          "description": "計算數學算式 (加減乘除/次方/根號)"
+        }
       ],
       "author": "Jeffrey"
     },
@@ -12,8 +26,14 @@
       "name": "cost",
       "description": "費用追蹤與用量查詢",
       "commands": [
-        { "name": "cost", "description": "查看 Bot 花費面板" },
-        { "name": "usage", "description": "查看 Anthropic API 本月用量" }
+        {
+          "name": "cost",
+          "description": "查看 Bot 累計費用"
+        },
+        {
+          "name": "usage",
+          "description": "查看 Anthropic API 即時用量"
+        }
       ],
       "author": "Jeffrey"
     },
@@ -21,8 +41,14 @@
       "name": "dice",
       "description": "骰子與隨機數",
       "commands": [
-        { "name": "dice", "description": "擲骰子 (1-10顆/範圍)" },
-        { "name": "coin", "description": "擲硬幣" }
+        {
+          "name": "dice",
+          "description": "丟骰子 (1-10顆/自訂)"
+        },
+        {
+          "name": "coin",
+          "description": "丟硬幣"
+        }
       ],
       "author": "Jeffrey"
     },
@@ -30,15 +56,21 @@
       "name": "github",
       "description": "GitHub Star — 快速 star repo",
       "commands": [
-        { "name": "star", "description": "Star a GitHub repo (owner/repo or keyword)" }
+        {
+          "name": "star",
+          "description": "Star a GitHub repo (owner/repo or keyword)"
+        }
       ],
       "author": "Jeffrey"
     },
     {
       "name": "mcp",
-      "description": "MCP 工具橋接",
+      "description": "MCP 工具管理",
       "commands": [
-        { "name": "mcp", "description": "列出/呼叫 MCP 工具" }
+        {
+          "name": "mcp",
+          "description": "列出/叫用 MCP 工具"
+        }
       ],
       "author": "Jeffrey"
     },
@@ -46,7 +78,10 @@
       "name": "reminder",
       "description": "計時器 & 提醒",
       "commands": [
-        { "name": "remind", "description": "快速計時 / 定時提醒" }
+        {
+          "name": "remind",
+          "description": "快速計時 / 定時提醒"
+        }
       ],
       "author": "Jeffrey"
     },
@@ -54,31 +89,43 @@
       "name": "scheduler",
       "description": "定時任務排程",
       "commands": [
-        { "name": "schedule", "description": "管理定時任務" }
+        {
+          "name": "schedule",
+          "description": "管理定時任務"
+        }
       ],
       "author": "Jeffrey"
     },
     {
       "name": "screenshot",
-      "description": "桌面與網頁截圖",
+      "description": "螢幕截圖與視窗切換",
       "commands": [
-        { "name": "screenshot", "description": "截取畫面 (1-9/list/URL)" }
+        {
+          "name": "screenshot",
+          "description": "切換視窗 (1-9/list/URL)"
+        }
       ],
       "author": "Jeffrey"
     },
     {
       "name": "search",
-      "description": "網頁搜尋（DuckDuckGo）",
+      "description": "網路搜尋（DuckDuckGo）",
       "commands": [
-        { "name": "search", "description": "搜尋網頁" }
+        {
+          "name": "search",
+          "description": "搜尋網路"
+        }
       ],
       "author": "Jeffrey"
     },
     {
       "name": "sysinfo",
-      "description": "系統資訊查看",
+      "description": "系統資訊查詢",
       "commands": [
-        { "name": "sysinfo", "description": "查看系統資訊" }
+        {
+          "name": "sysinfo",
+          "description": "查看系統資訊"
+        }
       ],
       "author": "Jeffrey"
     },
@@ -86,7 +133,10 @@
       "name": "stats",
       "description": "開發生產力統計",
       "commands": [
-        { "name": "stats", "description": "查看生產力統計 (week/month/hours/projects)" }
+        {
+          "name": "stats",
+          "description": "查看生產力統計 (week/month/hours/projects)"
+        }
       ],
       "author": "Jeffrey"
     }
