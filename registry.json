@@ -150,6 +150,41 @@
         }
       ],
       "author": "Jeffrey"
+    },
+    {
+      "name": "remote",
+      "description": "遠端電腦操控面板",
+      "commands": [
+        {
+          "name": "desktop",
+          "description": "列出遠端桌面檔案"
+        },
+        {
+          "name": "downloads",
+          "description": "列出遠端下載資料夾"
+        },
+        {
+          "name": "ls",
+          "description": "列出遠端目錄 (路徑)"
+        },
+        {
+          "name": "rcat",
+          "description": "讀取遠端檔案 (路徑)"
+        },
+        {
+          "name": "rwrite",
+          "description": "寫入遠端檔案 (路徑 內容)"
+        },
+        {
+          "name": "rinfo",
+          "description": "遠端系統資訊"
+        },
+        {
+          "name": "rexec",
+          "description": "在遠端執行指令"
+        }
+      ],
+      "author": "Jeffrey"
     }
   ]
 }
