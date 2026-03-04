@@ -1,4 +1,5 @@
 import { execSync } from 'node:child_process'
+import { basename, dirname } from 'node:path'
 import { scanProjects } from '../../config/projects.js'
 
 export interface CommitInfo {
@@ -40,10 +41,53 @@ function runGit(cwd: string, args: string): string {
 export function scanGitActivity(sinceDate: string, untilDate?: string): GitSummary {
   const projects = scanProjects()
   const allCommits: CommitInfo[] = []
+  const seenHashes = new Set<string>()
+
+  // Detect worktrees sharing the same git repo.
+  // git rev-parse --git-common-dir returns the main .git dir for worktrees.
+  // Map each common-dir to the canonical project name (main repo basename).
+  const repoNameCache = new Map<string, string>()
+
+  function resolveProjectName(project: { name: string; path: string }): string {
+    const commonDir = runGit(project.path, 'rev-parse --git-common-dir')
+    if (!commonDir) return project.name
+
+    // Normalize path for consistent cache key
+    const normalized = commonDir.replace(/\\/g, '/').replace(/\/+$/, '')
+
+    const cached = repoNameCache.get(normalized)
+    if (cached) return cached
+
+    // For worktrees: commonDir = "C:/code/ClaudeBot/.git"
+    // For main repo: commonDir = ".git"
+    let repoName: string
+    if (normalized === '.git') {
+      repoName = project.name
+    } else {
+      // Extract parent dir name: "C:/code/ClaudeBot/.git" → "ClaudeBot"
+      repoName = basename(dirname(normalized))
+    }
+
+    repoNameCache.set(normalized, repoName)
+    return repoName
+  }
 
   const untilArg = untilDate ? ` --until="${untilDate}"` : ''
 
+  // Track which git repos we've already scanned (by common-dir)
+  const scannedRepos = new Set<string>()
+
   for (const project of projects) {
+    // Skip if we already scanned this git repo via another worktree
+    const commonDir = runGit(project.path, 'rev-parse --git-common-dir')
+    const repoKey = commonDir
+      ? (commonDir === '.git' ? project.path : commonDir).replace(/\\/g, '/').replace(/\/+$/, '')
+      : project.path
+    if (scannedRepos.has(repoKey)) continue
+    scannedRepos.add(repoKey)
+
+    const projectName = resolveProjectName(project)
+
     // Get commit log with stats
     const log = runGit(
       project.path,
@@ -77,15 +121,18 @@ export function scanGitActivity(sinceDate: string, untilDate?: string): GitSumma
         if (insMatch || delMatch) i++ // skip stat line
       }
 
-      allCommits.push({
-        hash,
-        date,
-        timestamp,
-        message,
-        insertions,
-        deletions,
-        project: project.name,
-      })
+      if (!seenHashes.has(hash)) {
+        seenHashes.add(hash)
+        allCommits.push({
+          hash,
+          date,
+          timestamp,
+          message,
+          insertions,
+          deletions,
+          project: projectName,
+        })
+      }
 
       i++
     }
