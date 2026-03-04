@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="claudebot-plugins-logo.png" alt="ClaudeBot Plugins" width="160" />
+</p>
+
 <h1 align="center">ClaudeBot Plugins</h1>
 
 <p align="center">
