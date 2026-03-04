@@ -1,4 +1,4 @@
-# ClaudeBot Plugins
+<h1 align="center">ClaudeBot Plugins</h1>
 
 <p align="center">
   <strong>Plugin registry for <a href="https://github.com/Jeffrey0117/ClaudeBot">ClaudeBot</a></strong><br>
