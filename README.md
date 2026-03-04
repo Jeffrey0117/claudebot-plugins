@@ -1,71 +1,102 @@
-# ClaudeBot Plugin Store
+# ClaudeBot Plugins
 
-社群插件倉庫 — 透過 `/store`、`/install`、`/uninstall` 在 Telegram 中管理插件。
+<p align="center">
+  <strong>Plugin registry for <a href="https://github.com/Jeffrey0117/ClaudeBot">ClaudeBot</a></strong><br>
+  Browse, install, and manage plugins directly from Telegram.
+</p>
 
-## 使用方式
+---
 
-在 ClaudeBot 中：
+## Usage
+
+From any ClaudeBot chat:
 ```
-/store              → 瀏覽所有可用插件
-/store dice         → 查看插件詳情
-/install dice       → 安裝插件
-/uninstall dice     → 卸載插件
+/store              — browse all available plugins
+/store dice         — view plugin details
+/install dice       — install a plugin
+/uninstall dice     — remove a plugin
+/reload             — hot-reload without restart
 ```
 
-## 目前插件
+## Built-in Plugins
 
-| 插件 | 指令 | 說明 |
-|------|------|------|
-| browse | `/browse` | 互動式網頁瀏覽器 |
-| cost | `/cost` `/usage` | 費用追蹤與用量查詢 |
-| dice | `/dice` `/coin` | 骰子與隨機數 |
-| github | `/star` | GitHub Star — 快速 star repo |
-| mcp | `/mcp` | MCP 工具橋接 |
-| reminder | `/remind` | 計時器 & 提醒 |
-| scheduler | `/schedule` | 定時任務排程 |
-| screenshot | `/screenshot` | 桌面與網頁截圖 |
-| search | `/search` | 網頁搜尋（DuckDuckGo） |
-| sysinfo | `/sysinfo` | 系統資訊查看 |
+All plugins run at **zero AI cost** — no tokens consumed.
 
-## 投稿指南
+| Plugin | Commands | Description |
+|--------|----------|-------------|
+| **Browse** | `/browse` | Browser automation via Chrome DevTools Protocol |
+| **Calc** | `/calc` | Math expressions, date math, unit conversion |
+| **Clip** | `/save` `/recall` | Unified memory router — bookmark (📌), context pin (📎), AI memory (🧠) |
+| **Cost** | `/cost` `/usage` | API spend tracking per model and per project |
+| **Dice** | `/dice` `/coin` | Random numbers, dice rolls, coin flips |
+| **GitHub** | `/star` `/follow` | Star repos, follow users, search GitHub |
+| **Map** | `/map` | Location lookup → Google Maps link |
+| **MCP** | `/mcp` | Connect to MCP servers, list & call external tools |
+| **Mdfix** | `/mdfix` | Fix Telegram Markdown rendering issues |
+| **Remote** | `/pair` `/grab` | Remote machine pairing & file transfer via WebSocket |
+| **Reminder** | `/remind` | One-off timers — relative (`5m`) or absolute (`14:30`) |
+| **Scheduler** | `/schedule` | Recurring daily tasks (e.g. Bitcoin price at 09:00) |
+| **Screenshot** | `/screenshot` | Desktop & web page screenshots |
+| **Search** | `/search` | Web search via SearXNG |
+| **Stats** | `/stats` | Usage analytics — messages, models, projects, time series |
+| **Sysinfo** | `/sysinfo` | CPU, memory, disk, network info |
+| **Task** | `/task` | Daily task planner with time slots and status indicators |
+| **Vault** | `/vault` | Message indexing, full-text search, context recall, daily summary |
+| **Write** | `/write` | Quick note writing to file |
 
-歡迎提交 PR 貢獻新插件！
+## Creating a Plugin
 
-### 結構要求
+### Structure
 
 ```
 plugins/
   your-plugin/
-    index.ts       ← 必須 default export Plugin 物件
+    index.ts       — must default export a Plugin object
 ```
 
-### Plugin 介面
+### Plugin Interface
 
 ```typescript
-interface Plugin {
-  name: string
-  description: string
-  commands: {
-    name: string
-    description: string
-    handler: (ctx: BotContext) => Promise<void>
-  }[]
-  onMessage?: (ctx: BotContext) => Promise<boolean>
-  onCallback?: (ctx: BotContext, data: string) => Promise<boolean>
-  cleanup?: () => Promise<void>
+import type { Plugin } from '../../types/plugin.js'
+
+const plugin: Plugin = {
+  name: 'your-plugin',
+  description: 'What it does',
+  commands: [
+    {
+      name: 'cmd',
+      description: 'Command description',
+      handler: async (ctx) => { /* ... */ },
+    },
+  ],
+  // Optional hooks:
+  onMessage: async (ctx) => false,       // return true = message consumed
+  onCallback: async (ctx, data) => false, // handle inline button callbacks
+  outputHook: (text, meta) => ({ text }), // post-process AI output
+  cleanup: async () => {},                // called on shutdown
 }
+export default plugin
 ```
 
-### 提交步驟
+### Publishing to the Store
 
-1. Fork 此 repo
-2. 在 `plugins/` 下建立你的插件目錄
-3. 在 `registry.json` 的 `plugins` 陣列中加入你的插件資訊
-4. 提交 PR，說明插件功能
+1. Fork this repo
+2. Create your plugin directory under `plugins/`
+3. Add your plugin info to `registry.json`
+4. Submit a PR with a description of what the plugin does
 
-### 審核標準
+### Review Criteria
 
-- 不得包含惡意程式碼
-- 不得洩漏用戶隱私
-- 程式碼品質良好、有錯誤處理
-- `registry.json` 資訊完整
+- No malicious code or data exfiltration
+- No user privacy leaks
+- Proper error handling
+- Complete `registry.json` entry
+
+## Related
+
+- [**ClaudeBot**](https://github.com/Jeffrey0117/ClaudeBot) — the main bot
+- [**Documentation**](https://jeffrey0117.github.io/ClaudeBot/) — full setup guide & command reference
+
+## License
+
+MIT
